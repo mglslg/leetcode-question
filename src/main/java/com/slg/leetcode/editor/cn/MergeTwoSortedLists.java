@@ -32,7 +32,19 @@ public class MergeTwoSortedLists{
                 ListNode p1 = l1;
                 ListNode p2 = l2;
                 ListNode p1Pre = null;
+
+                if (p1 == null) {
+                    if (p2 == null) {
+                        return null;
+                    }else{
+                        return p2;
+                    }
+                }
+
                 while (p1 != null) {
+                    if (p2 == null) {
+                        break;
+                    }
                     if (p1.val < p2.val) {
                         p1Pre = p1;
                         p1 = p1.next;
@@ -44,9 +56,11 @@ public class MergeTwoSortedLists{
                         if (p1Pre != null) {
                             p1Pre.next = p2cut;
                         }else{
+                            //p2cut拼到首节点,此时需要将l1重新指向链首
                             l1 = p2cut;
                         }
                         p2cut.next = p1;
+                        p1Pre = p2cut;
                     }
                 }
                 return l1;
