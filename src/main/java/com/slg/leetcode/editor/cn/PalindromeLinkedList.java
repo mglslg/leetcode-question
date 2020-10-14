@@ -1,6 +1,6 @@
 package com.slg.leetcode.editor.cn;
 
-import com.slg.leetcode.editor.cn.common.ListNode;
+import com.slg.leetcode.editor.cn.ds.ListNode;
 
 public class PalindromeLinkedList{
         public static void main(String[] args) {

@@ -1,27 +1,12 @@
 package com.slg.leetcode.editor.cn;
 
-import com.slg.leetcode.editor.cn.common.ListNode;
+import com.slg.leetcode.editor.cn.ds.ListNode;
+import com.slg.leetcode.editor.cn.util.UseCaseUtil;
 
 public class IntersectionOfTwoLinkedLists{
         public static void main(String[] args) {
+            UseCaseUtil.buildLinkedList("[11,12,13,14,15,16,17,18,19,20,21,22,23,24]");
             Solution solution = new IntersectionOfTwoLinkedLists().new Solution();
-            ListNode a1 = new ListNode(11);
-            ListNode a2 = new ListNode(12);
-            ListNode a3 = new ListNode(13);
-            ListNode a4 = new ListNode(14);
-            ListNode a5 = new ListNode(15);
-            a1.next=a2;
-            a2.next=a3;
-            a3.next=a4;
-            a4.next=a5;
-
-            ListNode b1=new ListNode(3);
-            ListNode b2=new ListNode(2);
-            ListNode b3=new ListNode(4);
-            b1.next=b2;
-            b2.next=b3;
-
-            solution.getIntersectionNode(a1, b1);
         }
 
         //leetcode submit region begin(Prohibit modification and deletion)

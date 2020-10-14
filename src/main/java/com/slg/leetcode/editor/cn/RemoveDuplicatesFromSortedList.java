@@ -1,20 +1,10 @@
 package com.slg.leetcode.editor.cn;
 
+import com.slg.leetcode.editor.cn.ds.ListNode;
+
 public class RemoveDuplicatesFromSortedList{
         public static void main(String[] args) {
             Solution solution = new RemoveDuplicatesFromSortedList().new Solution();
-            ListNode n1 = new RemoveDuplicatesFromSortedList().new ListNode(1);
-            ListNode n2 = new RemoveDuplicatesFromSortedList().new ListNode(1);
-            ListNode n3 = new RemoveDuplicatesFromSortedList().new ListNode(1);
-            n1.next = n2;
-            n2.next = n3;
-            solution.deleteDuplicates(n1);
-        }
-
-        public class ListNode {
-            int val;
-            ListNode next;
-            ListNode(int x) { val = x; }
         }
 
         //leetcode submit region begin(Prohibit modification and deletion)

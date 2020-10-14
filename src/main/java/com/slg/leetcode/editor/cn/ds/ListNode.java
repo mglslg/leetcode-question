@@ -1,4 +1,4 @@
-package com.slg.leetcode.editor.cn.common;
+package com.slg.leetcode.editor.cn.ds;
 
 public class ListNode {
     public int val;

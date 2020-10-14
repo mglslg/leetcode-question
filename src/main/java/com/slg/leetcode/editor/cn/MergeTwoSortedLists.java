@@ -1,26 +1,11 @@
 package com.slg.leetcode.editor.cn;
 
+import com.slg.leetcode.editor.cn.ds.ListNode;
+
 public class MergeTwoSortedLists{
         public static void main(String[] args) {
             Solution solution = new MergeTwoSortedLists().new Solution();
-            ListNode l1 = new MergeTwoSortedLists().new ListNode(1);
-            l1.next = new MergeTwoSortedLists().new ListNode(2);
-            l1.next.next = new MergeTwoSortedLists().new ListNode(4);
-
-            ListNode l2 = new MergeTwoSortedLists().new ListNode(1);
-            l2.next = new MergeTwoSortedLists().new ListNode(3);
-            l2.next.next = new MergeTwoSortedLists().new ListNode(4);
-
-            solution.mergeTwoLists(l1, l2);
         }
-
-         public class ListNode {
-             int val;
-             ListNode next;
-             ListNode() {}
-             ListNode(int val) { this.val = val; }
-             ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-         }
 
         //leetcode submit region begin(Prohibit modification and deletion)
         class Solution {

@@ -1,15 +1,11 @@
 package com.slg.leetcode.editor.cn;
 
+import com.slg.leetcode.editor.cn.ds.ListNode;
+
 public class MiddleOfTheLinkedList{
         public static void main(String[] args) {
                 Solution solution = new MiddleOfTheLinkedList().new Solution();
         }
-
-         public class ListNode {
-             int val;
-             ListNode next;
-             ListNode(int x) { val = x; }
-         }
         //leetcode submit region begin(Prohibit modification and deletion)
         class Solution {
             public ListNode middleNode(ListNode head) {

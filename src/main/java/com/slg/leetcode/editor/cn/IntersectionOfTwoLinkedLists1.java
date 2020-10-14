@@ -1,6 +1,6 @@
 package com.slg.leetcode.editor.cn;
 
-import com.slg.leetcode.editor.cn.common.ListNode;
+import com.slg.leetcode.editor.cn.ds.ListNode;
 
 public class IntersectionOfTwoLinkedLists1 {
         public static void main(String[] args) {
