@@ -1,10 +1,14 @@
 package com.slg.leetcode.editor.cn;
 
 import com.slg.leetcode.editor.cn.ds.ListNode;
+import com.slg.leetcode.editor.cn.util.UseCaseUtil;
 
 public class IntersectionOfTwoLinkedLists{
         public static void main(String[] args) {
             Solution solution = new IntersectionOfTwoLinkedLists().new Solution();
+            ListNode headA = UseCaseUtil.buildLinkedList("[4,1,8,4,5]");
+            ListNode headB = UseCaseUtil.buildLinkedList("[5,6,1,8,4,5]");
+            solution.getIntersectionNode(headA, headB);
         }
 
         //leetcode submit region begin(Prohibit modification and deletion)
@@ -18,25 +22,25 @@ public class IntersectionOfTwoLinkedLists{
             public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
                 ListNode pa = headA;
                 ListNode pb = headB;
-                boolean joinedA = false;
-                boolean joinedB = false;
-                while(pa.next!=null || !joinedA){
-                    if (pa.next == null && !joinedA) {
-                        pa.next = headB;
-                        joinedA = true;
-                    }
-                    if (pb.next == null && !joinedB) {
-                        pb.next = headA;
-                        joinedB = true;
-                    }
-                    if(pa==pb){
-                        return pa;
+                if(pa==null || pb==null){
+                    return null;
+                }
+
+                //注意！这里不能改变链表的结构！只能判断相等而不能使用next链过去！
+                //而且当pa指向headB时就不能同时再用pa.next了否则会移动两次
+                while (pa != pb) {
+                    if (pa == null) {
+                        pa = headB;
                     }else{
                         pa = pa.next;
+                    }
+                    if (pb == null) {
+                        pb = headA;
+                    }else{
                         pb = pb.next;
                     }
                 }
-                return null;
+                return pa;
             }
         }
         //leetcode submit region end(Prohibit modification and deletion)
