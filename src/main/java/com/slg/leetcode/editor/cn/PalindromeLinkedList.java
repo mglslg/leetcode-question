@@ -40,8 +40,20 @@ public class PalindromeLinkedList{
             }
 
             private ListNode reverseList(ListNode head) {
-                //todo 待实现
-                return null;
+                if (head == null) {
+                    return null;
+                }
+                ListNode pre = null;
+                ListNode p = head;
+                ListNode pn = head.next;
+                while (pn != null) {
+                    p.next = pre;
+                    pre = p;
+                    p = pn;
+                    pn = pn.next;
+                }
+                p.next = pre;
+                return p;
             }
 
             private boolean isSame(ListNode p1, ListNode p2) {
