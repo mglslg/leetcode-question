@@ -21,55 +21,32 @@ public class AddTwoNumbers{
          */
         class Solution {
             public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-                long n1 = 0;
-                long n2 = 0;
-                Stack<Integer> stack1 = new Stack<>();
-                Stack<Integer> stack2 = new Stack<>();
-                ListNode p1=l1;
-                ListNode p2=l2;
-                while (p1 != null) {
-                    stack1.push(p1.val);
+                int carry = 0;
+                ListNode rs = null;
+                ListNode p1 = l1;
+                ListNode p2 = l2;
+                while (p1 != null && p2 != null) {
+                    if(p1.val+p2.val >= 10){
+                        carry=1;
+                        int currVal = p1.val + p2.val - 10;
+                        if (rs == null) {
+                            rs = new ListNode(currVal)
+                        }
+                    }else{
+
+                    }
                     p1 = p1.next;
-                }
-                while (p2 != null) {
-                    stack2.push(p2.val);
                     p2 = p2.next;
                 }
-                while(!stack1.isEmpty()){
-                    n1 = n1 * 10 + stack1.pop();
+                if(p1 == null && p2 !=null){
+                    rs.next = p2;
                 }
-                while(!stack2.isEmpty()){
-                    n2 = n2 * 10 + stack2.pop();
+                if (p2 == null && p1 != null) {
+                    rs.next = p1;
                 }
-                long sum = n1 + n2;
-                return buildList(sum);
+                return rs;
             }
 
-            public ListNode buildList(long num){
-                ListNode head = null;
-                ListNode tail = null;
-                while (num / 10 != 0) {
-                    Long x = num % 10;
-                    ListNode node = new ListNode(x.intValue());
-                    if (head == null) {
-                        head = node;
-                        tail = node;
-                    }else{
-                        tail.next = node;
-                        tail = node;
-                    }
-                    num = num / 10;
-                }
-                if (head == null) {
-                    Long x = num % 10;
-                    head = new ListNode(x.intValue());
-                }else{
-                    Long x = num % 10;
-                    ListNode node = new ListNode(x.intValue());
-                    tail.next = node;
-                }
-                return head;
-            }
         }
         //leetcode submit region end(Prohibit modification and deletion)
 }
