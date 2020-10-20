@@ -23,26 +23,36 @@ public class AddTwoNumbers{
             public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
                 int carry = 0;
                 ListNode rs = null;
+                ListNode pRs = null;
                 ListNode p1 = l1;
                 ListNode p2 = l2;
-                while (p1 != null && p2 != null) {
-                    if(p1.val+p2.val >= 10){
-                        carry=1;
-                        int currVal = p1.val + p2.val - 10;
-                        if (rs == null) {
-                            rs = new ListNode(currVal)
-                        }
-                    }else{
 
+                //两链表长短不一致时短那条后面按0处理
+                while (p1 != null || p2 != null) {
+                    int sum = (p1 == null ? 0 : p1.val) + (p2 == null ? 0 : p2.val) + carry;
+                    int finalVal = sum;
+                    if (sum >= 10) {
+                        finalVal = sum - 10;
+                        carry = 1;
+                    }else{
+                        carry = 0;
                     }
-                    p1 = p1.next;
-                    p2 = p2.next;
+                    if (rs == null) {
+                        rs = new ListNode(finalVal);
+                        pRs = rs;
+                    }else{
+                        pRs.next = new ListNode(finalVal);
+                        pRs = pRs.next;
+                    }
+
+                    //短的那条链表指针始终为null即可
+                    p1 = p1==null?null:p1.next;
+                    p2 = p2==null?null:p2.next;
                 }
-                if(p1 == null && p2 !=null){
-                    rs.next = p2;
-                }
-                if (p2 == null && p1 != null) {
-                    rs.next = p1;
+
+                //最后一位进1
+                if (carry == 1) {
+                    pRs.next = new ListNode(1);
                 }
                 return rs;
             }
