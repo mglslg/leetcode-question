@@ -20,6 +20,7 @@ public class ImplementStrstr{
                             }
                             idx++;
                         }else{
+                            idx = 0;
                             startIdx = -1;
                         }
                     }else{
