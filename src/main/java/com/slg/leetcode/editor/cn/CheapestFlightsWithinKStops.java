@@ -37,7 +37,7 @@ public class CheapestFlightsWithinKStops{
                             costs.put(nextNode, edgeWeight);
                             parents.put(nextNode, currNode);
                         }
-                        //将当前节点的后续节点加入队列，如果已经处理过则跳过
+                        //将当前节点的后续节点加入队列，如果已经处理过则跳过(防止有环？)
                         if (!processed.contains(nextNode)) {
                             queue.add(nextNode);
                         }
