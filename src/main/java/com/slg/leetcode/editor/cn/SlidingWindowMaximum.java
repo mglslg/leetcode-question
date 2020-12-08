@@ -7,24 +7,45 @@ public class SlidingWindowMaximum {
         Solution solution = new SlidingWindowMaximum().new Solution();
         int[] nums = new int[]{1, 3, -1, -3, 5, 3, 6, 7};
         int k = 3;
-        solution.maxSlidingWindow(nums, k);
+        int[] rs = solution.maxSlidingWindow(nums, k);
+        for (int r : rs) {
+            System.out.println(r);
+        }
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
+
     /**
      * 思路:
-     * 1、构造一个双向链表,窗口向右移动时,先lpop,再rpush
-     * 2、设置max变量记录当前窗口最大值
-     * 3、lpop后,?
-     * 4、rpush时,如果小于max则不必push,如果大于则更新max
-     * 2、新来的数字如果小于最左侧数据则不做rpush,如果大于最左侧数据则设置到max
+     * 构造一个双端队列,保持队列中的数从大到小排序,长度不超过k
+     * 判断新数x与rpeek的值:
+     * 如果x>rpeek，则持续rpop,直到不再满足这个条件,之后x入队
+     * 如果x<=rpeek，则判断lpeek是否已经是当前窗口的左边界了，是的话需要lpop
+     * 总结：实际上队列所维护的数据是这个窗口的一个真子集，并且从大到小排列，每次淘汰队列里不够大的数
+     * 脑洞：社团每往前走一步都是在寻觅一个更厉害的老大，找到后把当前不如他的弟兄们都淘汰，退休的(滑出窗口的)自动丢掉
      */
     class Solution {
         public int[] maxSlidingWindow(int[] nums, int k) {
-            LinkedList queue = new LinkedList();
-
-
-            return null;
+            int[] rs = new int[nums.length - k + 1];
+            //记录数组下标而非具体的数,以便后面判断是否越界
+            LinkedList<Integer> queue = new LinkedList();
+            for (int i = 0; i < nums.length; i++) {
+                //淘汰不够强的老人
+                while (!queue.isEmpty() && nums[i] > nums[queue.peekLast()]) {
+                    queue.pollLast();
+                }
+                //加入新人
+                queue.addLast(i);
+                //队列左端已经是窗口左边界了,超龄老人退休
+                if (queue.peekFirst() <= i - k) {
+                    queue.pollFirst();
+                }
+                //窗口创建完成时才加入rs
+                if (i + 1 - k >= 0) {
+                    rs[i + 1 - k] = nums[queue.peekFirst()];
+                }
+            }
+            return rs;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
