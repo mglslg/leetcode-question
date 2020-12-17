@@ -34,8 +34,8 @@ public class FriendCircles{
 
             private int findRoot(int node) {
                 if (node != parents[node]) {
+                    //这里加入了压缩的逻辑！将当前节点指向根！
                     return parents[node] = findRoot(parents[node]);
-                    //return findRoot(parents[node]); //可是why?????
                 }else {
                     return node;
                 }
