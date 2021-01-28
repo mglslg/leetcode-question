@@ -21,14 +21,53 @@ public class MaximumDepthOfBinaryTree {
     //leetcode submit region begin(Prohibit modification and deletion)
 
     /**
+     * 先序遍历解法
+     */
+    class Solution {
+        private int maxDepth = 0;
+
+        public int maxDepth(TreeNode root) {
+            countDepth(root, 0);
+            return maxDepth;
+        }
+
+        private void countDepth(TreeNode root,int currDepth){
+            if (root != null) {
+                currDepth++;
+                maxDepth = currDepth > maxDepth ? currDepth : maxDepth;
+                countDepth(root.left,currDepth);
+                countDepth(root.right,currDepth);
+            }
+        }
+    }
+    //leetcode submit region end(Prohibit modification and deletion)
+
+    /**
+     * 递归法(后序遍历)
+     * 思路：二叉树嘛，其实关键是要从左右节点上面找幺蛾子！那样是最优雅的思路！
+     * 我们只考虑(根-左-右)三个节点，这样的话想知道根的高度只要知道左右节点哪个高度更大就好了!
+     */
+    class Solution1 {
+        public int maxDepth(TreeNode root) {
+            if (root != null) {
+                int leftMax = maxDepth(root.left);
+                int rightMax = maxDepth(root.right);
+                return leftMax > rightMax ? leftMax + 1 : rightMax + 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    /**
      * 用一个stack记录遍历的节点，stack的最大值即为深度
      * 采用后序遍历，因为只有后序遍历才能保证stack有完整的深度
-     *
+     * <p>
      * 注意：
      * 1、后序遍历必须得记录上一次pop的右孩子防止进入死循环
      * 2、谨慎修改指针p，防止进入死循环
      */
-    class Solution {
+    class Solution2 {
         public int maxDepth(TreeNode root) {
             if (root == null) {
                 return 0;
@@ -43,7 +82,7 @@ public class MaximumDepthOfBinaryTree {
                     stack.push(p.left);
                     deep = stack.size() > deep ? stack.size() : deep;
                     p = p.left;
-                } else{
+                } else {
                     TreeNode peek = stack.peek();
                     if (peek.right != null && peek.right != lastPop) {
                         stack.push(peek.right);
@@ -55,24 +94,6 @@ public class MaximumDepthOfBinaryTree {
                 }
             }
             return deep;
-        }
-    }
-    //leetcode submit region end(Prohibit modification and deletion)
-
-    /**
-     * 递归法
-     * 思路：二叉树嘛，其实关键是要从左右节点上面找幺蛾子！那样是最优雅的思路！
-     * 我们只考虑(根-左-右)三个节点，这样的话想知道根的高度只要知道左右节点哪个高度更大就好了!
-     */
-    class Solution1 {
-        public int maxDepth(TreeNode root) {
-            if (root != null) {
-                int leftMax = maxDepth(root.left);
-                int rightMax = maxDepth(root.right);
-                return leftMax > rightMax ? leftMax + 1 : rightMax + 1;
-            } else {
-                return 0;
-            }
         }
     }
 }
