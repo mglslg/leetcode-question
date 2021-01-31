@@ -14,6 +14,8 @@ public class ConstructBinaryTreeFromPreorderAndInorderTraversal {
     class Solution {
         private int[] preorderList = null;
         private int[] inorderList = null;
+        private int lastLeftEnd = 0;//用于记录当前最左孩子的索引,下一个元素即当前根节点的右孩子
+
         public TreeNode buildTree(int[] preorder, int[] inorder) {
             preorderList = preorder;
             inorderList = inorder;
@@ -23,26 +25,37 @@ public class ConstructBinaryTreeFromPreorderAndInorderTraversal {
             return getTree(0, 0, inorder.length - 1);
         }
 
+        /**
+         * 本质上是个用根节点在树里做二分查找的过程
+         * 考虑用map存值map<value,index> 然后空间换时间？
+         * @param currRootIdx 根节点在先序遍历中的位置
+         * @param startIdx    区间开始索引在中序遍历中的位置
+         * @param endIdx      区间结束索引在中序遍历中的位置
+         */
         private TreeNode getTree(int currRootIdx, int startIdx, int endIdx) {
-            int rootVal=preorderList[currRootIdx];
+            //某个节点的左孩子或右孩子为空
+            if (startIdx > endIdx) {
+                return null;
+            }
+
+            int rootVal = preorderList[currRootIdx];
             TreeNode root = new TreeNode();
             root.val = rootVal;
 
             for (int i = startIdx; i <= endIdx; i++) {
                 if (inorderList[i] == rootVal) {
-                    if (i - 1 >= startIdx) {
-                        root.left = getTree(currRootIdx+1, startIdx, i - 1);
-                    }else{
-                        //已经向左走到头了，该右边了
-                        if (endIdx >= i + 1) {
-                            //右侧至少还剩一个，连到右孩子上
-                            root.right = getTree(currRootIdx+1, i + 1, endIdx);
-                        }
+                    root.left = getTree(currRootIdx + 1, startIdx, i - 1);
+                    if (root.left == null) {
+                        //说明当前节点已经是最左的节点,那么lastLeftEnd+1就应当是当前节点的右孩子
+                        lastLeftEnd = currRootIdx;
                     }
+                    root.right = getTree(lastLeftEnd + 1, i + 1, endIdx);
                 }
             }
+
             return root;
         }
+
     }
     //leetcode submit region end(Prohibit modification and deletion)
 
