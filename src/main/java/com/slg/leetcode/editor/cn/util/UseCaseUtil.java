@@ -2,6 +2,7 @@ package com.slg.leetcode.editor.cn.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.slg.leetcode.editor.cn.ds.ListNode;
+import com.slg.leetcode.editor.cn.ds.TreeNode;
 
 import java.util.Stack;
 
@@ -20,5 +21,12 @@ public class UseCaseUtil {
             lastHead = head;
         }
         return head;
+    }
+
+    public static TreeNode buildTree(Integer[] treeArray) {
+        if (treeArray.length == 0) {
+            return null;
+        }
+        return null;
     }
 }
