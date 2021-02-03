@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.slg.leetcode.editor.cn.ds.ListNode;
 import com.slg.leetcode.editor.cn.ds.TreeNode;
 
+import java.util.LinkedList;
 import java.util.Stack;
 
 public class UseCaseUtil {
@@ -27,6 +28,22 @@ public class UseCaseUtil {
         if (treeArray.length == 0) {
             return null;
         }
-        return null;
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        TreeNode root = new TreeNode(treeArray[0]);
+        queue.add(root);
+        for (int i = 1; i < treeArray.length; i = i + 2) {
+            TreeNode currRoot = queue.pollFirst();
+            if (treeArray[i] != null) {
+                TreeNode left = new TreeNode(treeArray[i]);
+                currRoot.left = left;
+                queue.add(left);
+            }
+            if (i + 1 < treeArray.length && treeArray[i + 1] != null) {
+                TreeNode right = new TreeNode(treeArray[i + 1]);
+                currRoot.right = right;
+                queue.add(right);
+            }
+        }
+        return root;
     }
 }
