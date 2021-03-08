@@ -17,6 +17,7 @@ public class PopulatingNextRightPointersInEachNode {
                 return null;
             }
             if (root.left != null) {
+                //这个解法的问题在于只解决了左半边的问题，没有向右平移！
                 Node connectedLeft = connect(root.left);
                 Node connectedRight = connect(root.right);
                 connectedLeft.next = connectedRight;
