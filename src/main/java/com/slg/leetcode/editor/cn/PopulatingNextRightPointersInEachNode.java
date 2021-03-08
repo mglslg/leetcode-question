@@ -21,8 +21,10 @@ public class PopulatingNextRightPointersInEachNode {
                 Node connectedLeft = connect(root.left);
                 Node connectedRight = connect(root.right);
                 connectedLeft.next = connectedRight;
+
+                //哎呦！可是此时还没有root.next呢！
                 if (root.next != null) {
-                    connectedRight.next = root.next.left;
+                    connectedRight.next = connect(root.next).left;
                 }
             }
             return root;
