@@ -12,62 +12,59 @@ public class PopulatingNextRightPointersInEachNodeIi {
         /**
          * 迭代加广度遍历
          * 注意不能只从root.left.left.left出发，并非满二叉树左节点很可能是缺失的
-         * 因此需要有一个指针来记录最左端的触发节点
+         * 因此需要有一个指针来记录最左端的触发节点(下一代长子)
          */
         public Node connect(Node root) {
             if (root == null) {
                 return null;
             }
 
-            Node mostLeft=root;
+            //每一代的长子
+            Node eldestSon = root;
 
-            //研究对象：当前节点已经链好了，要准备链下一级的节点
+            //研究对象：当前节点已经链好了，要准备链下一代的节点
             Node curr;
 
-            while (mostLeft != null) {
-                curr = mostLeft;
-
+            while(eldestSon != null){
+                //从长子开始对其下一代进行链接
+                curr = eldestSon;
                 while (curr != null) {
                     if (curr.left != null && curr.right != null) {
                         curr.left.next = curr.right;
-                        curr.right.next = getNext(curr.next);
+                        curr.right.next = getCurrEldestChild(curr.next);
                     }
                     if (curr.left != null && curr.right == null) {
-                        curr.left.next = getNext(curr.next);
+                        curr.left.next = getCurrEldestChild(curr.next);
                     }
                     if (curr.left == null && curr.right != null) {
-                        curr.right.next = getNext(curr.next);
+                        curr.right.next = getCurrEldestChild(curr.next);
                     }
                     curr = curr.next;
                 }
-                mostLeft = getNextLeft(mostLeft);
+
+                eldestSon = getCurrEldestChild(eldestSon);
             }
 
             return root;
         }
 
         /**
-         * 获取下一个需要链接的节点
+         * 获取从当前节点开始数起的第一个孩子
          */
-        private Node getNext(Node currNode) {
+        private Node getCurrEldestChild(Node currNode) {
             if (currNode == null) {
                 return null;
             }
 
-            while (currNode.left == null && currNode.right == null) {
+            while (currNode!=null && currNode.left == null && currNode.right == null) {
                 currNode = currNode.next;
             }
-            if (currNode.left != null) {
+            if (currNode!=null && currNode.left != null) {
                 return currNode.left;
             }
-            if (currNode.right != null) {
+            if (currNode!=null && currNode.right != null) {
                 return currNode.right;
             }
-
-            return null;
-        }
-
-        private Node getNextLeft(Node currLeft) {
 
             return null;
         }
