@@ -23,26 +23,30 @@ public class PopulatingNextRightPointersInEachNodeIi {
             Node eldestSon = root;
 
             //研究对象：当前节点已经链好了，要准备链下一代的节点
-            Node curr;
+            Node curr = root;
 
-            while(eldestSon != null){
-                //从长子开始对其下一代进行链接
-                curr = eldestSon;
+            while(curr != null){
+                //作为长子的前置接点
+                Node preEldestSon = new Node(0);
+                curr = preEldestSon;
                 while (curr != null) {
                     if (curr.left != null && curr.right != null) {
+                        preEldestSon.next=curr.left;
                         curr.left.next = curr.right;
                         curr.right.next = getCurrEldestChild(curr.next);
                     }
                     if (curr.left != null && curr.right == null) {
+                        preEldestSon.next=curr.left;
                         curr.left.next = getCurrEldestChild(curr.next);
                     }
                     if (curr.left == null && curr.right != null) {
+                        preEldestSon.next=curr.right;
                         curr.right.next = getCurrEldestChild(curr.next);
                     }
                     curr = curr.next;
                 }
 
-                eldestSon = getCurrEldestChild(eldestSon);
+                curr = preEldestSon.next;
             }
 
             return root;
