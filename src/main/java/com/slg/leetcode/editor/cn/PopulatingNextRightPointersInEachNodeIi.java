@@ -10,67 +10,35 @@ public class PopulatingNextRightPointersInEachNodeIi {
     //leetcode submit region begin(Prohibit modification and deletion)
     class Solution {
         /**
-         * 迭代加广度遍历
-         * 注意不能只从root.left.left.left出发，并非满二叉树左节点很可能是缺失的
-         * 因此需要有一个指针来记录最左端的触发节点(下一代长子)
+         * 思路：不要把它想象成树，就把它想象成一个多层链表，跳表
+         * 移动上一层的链表，然后链接下一层的链表，就这样！
          */
         public Node connect(Node root) {
             if (root == null) {
                 return null;
             }
 
-            //每一代的长子
-            Node eldestSon = root;
-
-            //研究对象：当前节点已经链好了，要准备链下一代的节点
+            //研究对象：上一层的链表节点
             Node curr = root;
 
-            while(curr != null){
-                //作为长子的前置接点
-                Node preEldestSon = new Node(0);
-                curr = preEldestSon;
+            while (curr != null) {
+                //这个节点相当于一个"钉子"，先把开头钉在墙上，然后让指向它的另一个节点p来移动，一边移动一边串联下一级链表
+                Node preNextLevel = new Node(0);
+                Node p = preNextLevel;
                 while (curr != null) {
-                    if (curr.left != null && curr.right != null) {
-                        preEldestSon.next=curr.left;
-                        curr.left.next = curr.right;
-                        curr.right.next = getCurrEldestChild(curr.next);
+                    if (curr.left != null) {
+                        p.next = curr.left;
+                        p = p.next;
                     }
-                    if (curr.left != null && curr.right == null) {
-                        preEldestSon.next=curr.left;
-                        curr.left.next = getCurrEldestChild(curr.next);
-                    }
-                    if (curr.left == null && curr.right != null) {
-                        preEldestSon.next=curr.right;
-                        curr.right.next = getCurrEldestChild(curr.next);
+                    if (curr.right != null) {
+                        p.next = curr.right;
+                        p = p.next;
                     }
                     curr = curr.next;
                 }
-
-                curr = preEldestSon.next;
+                curr = preNextLevel.next;
             }
-
             return root;
-        }
-
-        /**
-         * 获取从当前节点开始数起的第一个孩子
-         */
-        private Node getCurrEldestChild(Node currNode) {
-            if (currNode == null) {
-                return null;
-            }
-
-            while (currNode!=null && currNode.left == null && currNode.right == null) {
-                currNode = currNode.next;
-            }
-            if (currNode!=null && currNode.left != null) {
-                return currNode.left;
-            }
-            if (currNode!=null && currNode.right != null) {
-                return currNode.right;
-            }
-
-            return null;
         }
     }
 //leetcode submit region end(Prohibit modification and deletion)
