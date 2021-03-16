@@ -27,10 +27,14 @@ public class LowestCommonAncestorOfABinaryTree {
             TreeNode pa = p;
             TreeNode qa = q;
 
-            while (parentMap.containsKey(pa)) {
-                TreeNode father = parentMap.get(pa);
-                path.add(father);
-                pa = father;
+            while (true) {
+                if (parentMap.containsKey(pa) || parentMap.containsKey(qa)) {
+                    TreeNode father = parentMap.get(pa);
+                    path.add(father);
+                    pa = father;
+                }else{
+                    break;
+                }
             }
 
             return null;
