@@ -2,43 +2,52 @@ package com.slg.leetcode.editor.cn;
 
 import com.slg.leetcode.editor.cn.ds.TreeNode;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 public class LowestCommonAncestorOfABinaryTree {
     public static void main(String[] args) {
         Solution solution = new LowestCommonAncestorOfABinaryTree().new Solution();
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
-
     /**
-     * 递归解法：f(x)表示当前节点下是否存在p或q
-     * (flson && frson) ∣∣ ((x = p ∣∣ x = q) && (flson ∣∣ frson))
+     * 哈希表记录父节点解法：
+     * 1、使用一个HashMap记录每个节点的父节点
+     * 2、从hashmap中分别找到p和q，依次向上找它俩的父节点，并且还要做记录
+     * 3、在向上找的过程中一旦发现父节点在记录中出现过，那这个节点即为最近祖先
      */
     class Solution {
-        private TreeNode rs;
+        private HashMap<TreeNode, TreeNode> parentMap = new HashMap<>();
+        private HashSet<TreeNode> path = new HashSet<>();
 
         public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+            dfs(root);
 
-            fx(root,p,q);
+            TreeNode pa = p;
+            TreeNode qa = q;
 
-            return rs;
+            while (parentMap.containsKey(pa)) {
+                TreeNode father = parentMap.get(pa);
+                path.add(father);
+                pa = father;
+            }
+
+            return null;
         }
 
-        private boolean fx(TreeNode curr, TreeNode p, TreeNode q) {
-            if (curr == null) {
-                return false;
+        /**
+         * 负责初始化hashmap
+         */
+        private void dfs(TreeNode root){
+            if (root == null) {
+                return ;
             }
-            boolean lAndR = fx(curr.left, p, q) && fx(curr.right, p, q);
-            boolean xIsPOrQ = curr == p || curr == q;
-            boolean lOrR = fx(curr.left, p, q) || fx(curr.right, p, q);
-
-            if (lAndR || (xIsPOrQ && lOrR)) {
-                rs = curr;
+            if (root.left != null) {
+                parentMap.put(root.left, root);
             }
-
-            if (curr == p || curr == q) {
-                return true;
-            }else{
-                return (fx(curr.left, p, q) || fx(curr.right, p, q));
+            if (root.right != null) {
+                parentMap.put(root.right, root);
             }
         }
     }
