@@ -23,21 +23,33 @@ public class LowestCommonAncestorOfABinaryTree {
 
         public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
             dfs(root);
+            parentMap.put(root,null);
 
             TreeNode pa = p;
             TreeNode qa = q;
 
             while (true) {
                 if (parentMap.containsKey(pa) || parentMap.containsKey(qa)) {
-                    TreeNode father = parentMap.get(pa);
-                    path.add(father);
-                    pa = father;
+                    if (parentMap.containsKey(pa)) {
+                        if (path.contains(pa)) {
+                            return pa;
+                        }else{
+                            path.add(pa);
+                            pa =  parentMap.get(pa);
+                        }
+                    }
+                    if (parentMap.containsKey(qa)) {
+                        if (path.contains(qa)) {
+                            return qa;
+                        }else{
+                            path.add(qa);
+                            qa = parentMap.get(qa);
+                        }
+                    }
                 }else{
-                    break;
+                    return null;
                 }
             }
-
-            return null;
         }
 
         /**
@@ -53,6 +65,8 @@ public class LowestCommonAncestorOfABinaryTree {
             if (root.right != null) {
                 parentMap.put(root.right, root);
             }
+            dfs(root.left);
+            dfs(root.right);
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
