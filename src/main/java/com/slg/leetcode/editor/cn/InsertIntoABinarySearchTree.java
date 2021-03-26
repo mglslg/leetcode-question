@@ -9,10 +9,8 @@ public class InsertIntoABinarySearchTree {
 
     //leetcode submit region begin(Prohibit modification and deletion)
     /**
-     * 思路：从根节点开始找，小的向左走到root.left，大的向右走到root.right
-     * 走不动了就讨论：根-左-右，就在这三个里面往里挤，其中讨论左和右为空的情况即可
-     *
-     * 也可以理解为二分查找的寻找区间
+     * 递归思路：一边搜索一边递归构建这棵树
+     * 反正也不知怎么写，不如先把递归函数列出来再说吧……结果列出来就会写了
      */
     class Solution {
         public TreeNode insertIntoBST(TreeNode root, int val) {
@@ -20,42 +18,22 @@ public class InsertIntoABinarySearchTree {
                 return new TreeNode(val);
             }
 
-            TreeNode p = root;
-            while (true) {
-                if (p.left != null && val < p.val) {
-                    p = p.left;
-                    continue;
-                } else if (p.right != null && val > p.val) {
-                    p = p.right;
-                    continue;
-                } else {
-                    //左移和右移都已经完成了，现在val就在"根-左-右"这三个数中间，分情况讨论
-                    TreeNode newNode = new TreeNode(val);
-                    if (val < p.val) {
-                        p.left = newNode;
-                        if (p.left != null) {
-                            //在根、左中间
-                            TreeNode left = p.left;
-                            p.left = newNode;
-                            newNode.left = left;
-                        } else {
-                            p.left = newNode;
-                        }
-                    } else {
-                        if (p.right != null) {
-                            //在根、右中间
-                            TreeNode right = p.right;
-                            p.right = newNode;
-                            newNode.right = right;
-                        } else {
-                            p.right = newNode;
-                        }
-                    }
-
-                    //处理完毕退出
-                    break;
+            if (root.left == null && root.right == null) {
+                if (val < root.val) {
+                    root.left = new TreeNode(val);
+                }else{
+                    root.right = new TreeNode(val);
                 }
+                return root;
             }
+
+            //如果小于root就到左边去重新构建树，如果大于就到右边去重新构建树
+            if(val < root.val){
+                root.left = insertIntoBST(root.left, val);
+            }else{
+                root.right = insertIntoBST(root.right, val);
+            }
+
             return root;
         }
     }
