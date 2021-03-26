@@ -18,6 +18,7 @@ public class InsertIntoABinarySearchTree {
                 return new TreeNode(val);
             }
 
+            //todo 卧槽看评论区题解这段似乎都能省掉！
             if (root.left == null && root.right == null) {
                 if (val < root.val) {
                     root.left = new TreeNode(val);
