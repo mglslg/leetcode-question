@@ -14,18 +14,9 @@ public class InsertIntoABinarySearchTree {
      */
     class Solution {
         public TreeNode insertIntoBST(TreeNode root, int val) {
+            //当root为null时上一层一定是个叶子节点，或者本来就是棵空树
             if (root == null) {
                 return new TreeNode(val);
-            }
-
-            //todo 卧槽看评论区题解这段似乎都能省掉！
-            if (root.left == null && root.right == null) {
-                if (val < root.val) {
-                    root.left = new TreeNode(val);
-                }else{
-                    root.right = new TreeNode(val);
-                }
-                return root;
             }
 
             //如果小于root就到左边去重新构建树，如果大于就到右边去重新构建树
