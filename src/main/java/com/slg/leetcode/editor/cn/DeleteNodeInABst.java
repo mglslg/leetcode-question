@@ -36,10 +36,6 @@ public class DeleteNodeInABst {
                     int predecessorVal = predecessor.val;
                     root = deleteNode(root, predecessorVal);//啊呀！这个地方真的很巧妙哎！因为predecessor一定是个叶子节点，所以就会走叶子节点的删除方案！
                     root.val = predecessorVal;
-
-                    //predecessor.left = root.left;
-                    //todo 怎样才能断掉predecessor跟他爹的链接呢 ？
-                    //return predecessor;
                 }
             }
             if (key < root.val) {
