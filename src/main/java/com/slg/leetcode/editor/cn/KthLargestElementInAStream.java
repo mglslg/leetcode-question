@@ -6,10 +6,22 @@ public class KthLargestElementInAStream {
         KthLargest kth = new KthLargestElementInAStream()
                 .new KthLargest(3, new int[]{4, 5, 8, 2});
 
-        kth.add(6);
+        kth.add(3);
+        kth.add(5);
+        kth.add(10);
+        kth.add(9);
+        kth.add(4);
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
+    /**
+     * 思路：构建一颗BST，第k大的元素即为排序数列中的第 length-k+1 个数
+     * 数左子树就是第m个数；数右子树就是第k大的。CntRoot=CntLeft+CntRight+1
+     * 其中length即为根节点的cnt值
+     *
+     * 但是这种解法目前解决不了重复数值的问题，可以考虑用一个map来记录重复值，然后每发现一次就令m+1或者k+1,之后继续找
+     * 因此这题还需要继续优化
+     */
     class KthLargest {
         private int k;
         private KNode kRoot;
@@ -31,44 +43,31 @@ public class KthLargestElementInAStream {
         }
 
         public KNode findTarget(KNode root, int k) {
-            if (k == root.cnt && root.right == null) {
+            //数列中的第m个值
+            int m = root.cnt - k + 1;
+
+            /**
+             * 左子树cnt+1代表第m个元素
+             * 右子树cnt就代表k+1就代表第k大
+             */
+            if ((root.cnt - subTreeCnt(root.right) == m)
+                    || (root.cnt - subTreeCnt(root.left) == k)) {
                 return root;
-            } else {
-                if (k <= subTreeCnt(root.left)) {
-                    //cover左子树为空的情况，因为subTreeCnt会为0，而k不会为0
+            }else{
+                if (m <= subTreeCnt(root.left)) {
                     return findTarget(root.left, k);
-                }else{
-                    //因为现在只算从右边几个数里第k大的，所以要减掉左边的，再减掉root的1
-                    //subTreeCnt也可以cover左子树为空的情况，左子树为空则只减掉root的1
-                    k = k - subTreeCnt(root.left) - 1;
+                } else {
                     return findTarget(root.right, k);
                 }
-/*
-                if (root.left != null && root.right != null) {
-                    if (k <= root.left.cnt) {
-                        return findTarget(root.left, k);
-                    }else{
-                        //左子树不为空，减去左子树count再减去根节点的1即可
-                        //todo 这里似乎能做优化，判断left是否为空为空就返回0
-                        k = k - root.left.cnt - 1;
-                        return findTarget(root.right, k);
-                    }
-                }else if (root.left != null) {
-                    return findTarget(root.left, k);
-                }else if (root.right != null) {
-                    //左子树为空，减去root这个1即可
-                    return findTarget(root.right, k - 1);
-                }else{
-                    //到了叶子节点还不符合开头条件的话，那就是没找到
-                    return null;
-                }*/
             }
         }
 
+        //可以cover子树为空的情况，可不判断左右孩子是否为null而直接使用
         private int subTreeCnt(KNode child) {
             return child == null ? 0 : child.cnt;
         }
 
+        //这棵树所有重复的值都在右侧
         private KNode addNodeToBST(KNode root, int val) {
             if (root == null) {
                 KNode leaf = new KNode(val);
