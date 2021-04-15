@@ -1,9 +1,6 @@
 package com.slg.leetcode.editor.cn;
 
 import com.slg.leetcode.editor.cn.ds.TreeNode;
-
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
 public class ErChaShuDeZuiJinGongGongZuXianLcof {
@@ -20,33 +17,42 @@ public class ErChaShuDeZuiJinGongGongZuXianLcof {
      * pop到长度相等的时候两个一起pop，之后只要遇到一个相同的元素就是最近公共祖先！
      */
     class Solution {
-        private Set<TreeNode> pParent = new HashSet<>();
-        Stack<TreeNode> tempStack = new Stack<>();
+        private Stack<TreeNode> pStack;
+        private Stack<TreeNode> qStack;
+        private Stack<TreeNode> currStack = new Stack<>();
 
         public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-            if (root == null) {
-                return null;
+            stackHelper(root, p, q);
+            while (pStack.size() > qStack.size()) {
+                pStack.pop();
             }
-            if (hasChild(root, p) && hasChild(root, q)) {
-                return root;
+            while (qStack.size() > pStack.size()) {
+                qStack.pop();
             }
-            if (root == q && hasChild(root, p)) {
-                return root;
+            while (!qStack.isEmpty()) {
+                TreeNode currQ = qStack.pop();
+                TreeNode currP = pStack.pop();
+                if (currQ.val == currP.val) {
+                    return currQ;
+                }
             }
-            if (root == p && hasChild(root, q)) {
-                return root;
-            }
-            return lowestCommonAncestor(root.left, p, q) == null ? lowestCommonAncestor(root.right, p, q):lowestCommonAncestor(root.left, p, q);
+            return null;
         }
 
-        private boolean hasChild(TreeNode root, TreeNode child) {
+        private void stackHelper(TreeNode root, TreeNode p, TreeNode q) {
             if (root == null) {
-                return false;
+                return;
             }
-            if (root == child) {
-                return true;
+            currStack.push(root);
+            if (root.val == p.val) {
+                pStack = (Stack<TreeNode>)currStack.clone();
             }
-            return hasChild(root.left, child) || hasChild(root.right, child);
+            if (root.val == q.val) {
+                qStack = (Stack<TreeNode>) currStack.clone();
+            }
+            stackHelper(root.left, p, q);
+            stackHelper(root.right, p, q);
+            currStack.pop();
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
