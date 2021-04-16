@@ -6,44 +6,30 @@ public class FindPeakElement {
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
-
     /**
-     * 使用二分法，让mid后与mid-1和mid+1进行比较
-     * 如果如果mid最大则直接返回
-     * 如果mid<mid+1，那么往右走，反之往左走
+     * 使用二分法，让mid与mid+1比较
+     * 如果mid+1更大就右移，移到mid+1
+     * 否则就左移，移到mid，因为mid也有可能是峰值
      */
     class Solution {
         public int findPeakElement(int[] nums) {
             int l = 0;
             int r = nums.length - 1;
-
-            //记得要考虑l或者r就是峰值的情况
-            //不会出现l等于r的情况！至少要有两个数字比较才有意义！
-            while (l < r) {
+            while (l <= r) {
+                //退无可退时就是答案啊！唉~~~
+                if (l == r) {
+                    return l;
+                }
+                //当abs(r-l)==1时，mid就是左边那个数
                 int mid = (l + r) / 2;
-
-                if (l + 1 == r) {
-                    if (nums[l] > nums[r]) {
-                        return l;
-                    }
-                    if (nums[l] < nums[r]) {
-                        return r;
-                    }
-                }
-
-                //todo
-
-                //防止溢出,一旦溢出就让其等于mid本身
-                int leftIdx = mid - 1 < l ? mid : mid - 1;
-                int rightIdx = mid + 1 > r ? mid : mid + 1;
-
-                if (nums[leftIdx] < nums[mid] && nums[mid] > nums[rightIdx]) {
-                    return mid;
-                }
-                if (nums[leftIdx] < nums[mid] && nums[mid] < nums[rightIdx]) {
+                //因为至少有两个数，因此mid+1并不溢出
+                if(nums[mid]<nums[mid+1]){
+                    //单调递增，所以峰值一定在右边
                     l = mid + 1;
                 }else{
-                    r = mid - 1;
+                    //万能的else
+                    //必须得包含mid本身，因为mid可能就是那个峰值!
+                    r = mid;
                 }
             }
             return 0;
