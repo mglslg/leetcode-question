@@ -1,10 +1,13 @@
 package com.slg.leetcode.editor.cn.ds;
 
+import java.util.List;
+
 public class Node {
     public int val;
     public Node left;
     public Node right;
     public Node next;
+    public List<Node> children;
 
     public Node() {}
 
@@ -17,5 +20,13 @@ public class Node {
         left = _left;
         right = _right;
         next = _next;
+    }
+
+    public Node(int val, Node left, Node right, Node next, List<Node> children) {
+        this.val = val;
+        this.left = left;
+        this.right = right;
+        this.next = next;
+        this.children = children;
     }
 }
