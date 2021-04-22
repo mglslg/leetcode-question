@@ -1,17 +1,22 @@
 package com.slg.leetcode.editor.cn;
 
 import com.slg.leetcode.editor.cn.ds.TreeNode;
-import com.slg.leetcode.editor.cn.util.UseCaseUtil;
 
 import java.util.LinkedList;
 
 public class XuLieHuaErChaShuLcof {
     public static void main(String[] args) {
         Codec solution = new XuLieHuaErChaShuLcof().new Codec();
+        TreeNode root = new TreeNode(1);
+        TreeNode left = new TreeNode(2);
+        TreeNode right = new TreeNode(3);
+        root.left = left;
+        root.right = right;
+        //System.out.println(solution.serialize(root));
 
-        Integer[] arr = new Integer[]{1, 2, 3, null, 4, 5, null, 6, 7};
-        TreeNode root = UseCaseUtil.buildTree(arr);
-        System.out.println(solution.serialize(root));
+        String nodes = "[1,2,3,5,null,null,6,null,null,7,8]";
+        TreeNode rs = solution.deserialize(nodes);
+        System.out.println(rs.val);
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
@@ -76,7 +81,6 @@ public class XuLieHuaErChaShuLcof {
             return root;
         }
     }
-
     //leetcode submit region end(Prohibit modification and deletion)
 
 }
