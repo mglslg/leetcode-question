@@ -6,11 +6,13 @@ public class MedianOfTwoSortedArrays {
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
+
     /**
-     * 从两个数组中依次取值，先取小的，保持取出来的数单调递增
-     * 找出两条数组拼起来之后的第k个数(长度为m+n)
-     * 如果m+n是奇数，那么第k个数就是中位数
-     * 如果m+n是偶数，那么第k个数与第k+1个数的平均值就是中位数
+     * 想象将两个数组合并成一个有序数组，k=(m+n)/2
+     * 如果是奇数，那么就要找到下标为[k]的元素
+     * 如果是偶数，那么就要找到下标为[k-1]和[k]这两个元素
+     * 那么其实就不必每个元素都遍历，二分法跳着找到k即可
+     * 由于k是两个数组合并后的下标，因此每个数组的右边界其实是k/2
      */
     class Solution {
         public double findMedianSortedArrays(int[] nums1, int[] nums2) {
@@ -19,56 +21,37 @@ public class MedianOfTwoSortedArrays {
             if (m + n == 0) {
                 return 0;
             }
-
-            int k = (m + n + 1) / 2;
-            boolean isOdd = (m + n) % 2 == 1 ? true : false; //是否为奇数
+            //是否为奇数
+            boolean isOdd = (m + n) % 2 == 1 ? true : false;
             int p1 = 0;
             int p2 = 0;
-            double kthVal = 0;
-            double kthNextVal = 0;
+            double pre=0;
+            double kVal=0;
 
-            //想要找到第k个数，就需要遍历k次
-            for (int i = 0; i < k; i++) {
+            //想象为一个长度为m+n的新数组，(m+n)/2刚好能取到下中位
+            for (int i = 0; i <= (m + n) / 2; i++) {
+                pre = kVal;
                 if (p1 < nums1.length && p2 < nums2.length) {
                     if (nums1[p1] < nums2[p2]) {
-                        kthVal = nums1[p1];
+                        kVal = nums1[p1];
                         p1++;
-                    } else {
-                        kthVal = nums2[p2];
+                    }else{
+                        kVal = nums2[p2];
                         p2++;
                     }
                 } else if (p1 < nums1.length) {
-                    //p2到头了
-                    kthVal = nums1[p1];
+                    kVal=nums1[p1];
                     p1++;
                 } else {
-                    //p1到头了
-                    kthVal = nums2[p2];
+                    kVal=nums2[p2];
                     p2++;
                 }
             }
-            //奇数直接返回k的值，偶数找到k的下一个，然后取平均
-            if (isOdd) {
-                return kthVal;
+
+            if(isOdd){
+                return kVal;
             }else{
-                if (p1 < nums1.length && p2 < nums2.length) {
-                    if (nums1[p1] < nums2[p2]) {
-                        kthNextVal = nums1[p1];
-                        p1++;
-                    } else {
-                        kthNextVal = nums2[p2];
-                        p2++;
-                    }
-                } else if (p1 < nums1.length) {
-                    //p2到头了
-                    kthNextVal = nums1[p1];
-                    p1++;
-                } else {
-                    //p1到头了
-                    kthNextVal = nums2[p2];
-                    p2++;
-                }
-                return (kthVal+kthNextVal)/2;
+                return (pre+kVal)/2;
             }
         }
     }
