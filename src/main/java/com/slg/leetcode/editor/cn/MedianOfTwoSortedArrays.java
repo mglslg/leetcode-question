@@ -6,12 +6,11 @@ public class MedianOfTwoSortedArrays {
     }
 
     //leetcode submit region begin(Prohibit modification and deletion)
-
     /**
      * 想象将两个数组合并成一个有序数组，k=(m+n)/2
      * 如果是奇数，那么就要找到下标为[k]的元素
      * 如果是偶数，那么就要找到下标为[k-1]和[k]这两个元素
-     * 那么其实就不必每个元素都遍历，二分法跳着找到k即可
+     * 那么其实就不必每个元素都遍历，二分法跳着找到k即可，每次都可以丢弃一些一定不会是答案的数列
      * 由于k是两个数组合并后的下标，因此每个数组的右边界其实是k/2
      */
     class Solution {
