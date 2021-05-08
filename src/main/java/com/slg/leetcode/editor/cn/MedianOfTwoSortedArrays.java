@@ -17,10 +17,6 @@ public class MedianOfTwoSortedArrays {
      * 如果m+n为偶数，那么除了找到k还要找到k的下一个数
      */
     class Solution {
-        private int[] nums1;
-        private int[] nums2;
-        private int length1;
-        private int length2;
 
         public double findMedianSortedArrays(int[] nums1, int[] nums2) {
             int m = nums1.length;
@@ -28,10 +24,6 @@ public class MedianOfTwoSortedArrays {
             if (m + n == 0) {
                 return 0;
             }
-            this.nums1 = nums1;
-            this.nums2 = nums2;
-            this.length1 = nums1.length;
-            this.length2 = nums2.length;
 
             //是否为奇数
             boolean isOdd = (m + n) % 2 == 1 ? true : false;
@@ -39,9 +31,9 @@ public class MedianOfTwoSortedArrays {
             int k = (m + n + 1) / 2;
 
             if (isOdd) {
-                return find(k, 0, 0);
+                return find(k, nums1,nums2,0, 0);
             } else {
-                return (find(k, 0, 0) + find(k + 1, 0, 0)) / 2;
+                return (find(k,nums1,nums2, 0, 0) + find(k + 1,nums1,nums2, 0, 0)) / 2;
             }
         }
 
@@ -51,7 +43,7 @@ public class MedianOfTwoSortedArrays {
          * 这样的话一次可以排除一半，从而降低时间复杂度
          * 裁着裁着最后就会变成：从两个有序数组中比较第2大的数
          */
-        private double find(int k, int p1, int p2) {
+        private double find(int k, int[] nums1, int[] nums2, int p1, int p2) {
             if (k == 1) {
                 if (p1 < nums1.length && p2 < nums2.length) {
                     //p1和p2都没有越界的情况
@@ -64,52 +56,29 @@ public class MedianOfTwoSortedArrays {
                     return nums2[p2];
                 }
             } else {
-                int halfKth = k / 2;
-                int offset = halfKth - 1;
-                int compare1 = 0;
-                int compare2 = 0;
-                int abandonCount = halfKth;//下一轮丢弃的个数
-                boolean p1Bound = true;
-                boolean p2Bound = true;
+                if (nums1.length - p1 > nums2.length - p2) {
+                    //交换两条数组,保证nums1永远比nums2短
+                    return find(k, nums2, nums1, p2, p1);
+                }else{
+                    int halfKth = k / 2;
+                    boolean num1OutOfBound = halfKth > nums1.length - p1;
+                    int compare1;
+                    if(num1OutOfBound){
+                        //当num1已经越界时,直接取最后一个元素做比较
+                        compare1 = nums1[nums1.length - 1];
+                    }else{
+                        compare1 = nums1[p1 + halfKth - 1];
+                    }
+                    //todo 决定到底是抛弃nums1还是抛弃nums2的条件
+                    if (num1OutOfBound && compare1 < nums2[p2 + halfKth - 1]) {
+                        //nums1剩余的全抛弃，抛弃个数就是剩余长度
+                    } else if (compare1 < nums2[p2 + halfKth - 1]) {
 
-                if (p1 + offset < nums1.length && p2 + offset < nums2.length) {
-                    compare1 = nums1[p1 + offset];
-                    compare2 = nums2[p2 + offset];
-                } else if (p1 + offset < nums1.length) {
-                    compare1 = nums1[p1 + offset];
-                    if (p2 < length2) {
-                        //nums2在偏移后越界,直接取数组最后一个值作为比较点
-                        compare2 = nums2[length2 - 1];
-                        p2Bound = true;
-                    } else {
-                        //nums2已经全部被遍历过了,或是本来就为空
-                        compare2 = Integer.MAX_VALUE;
                     }
-                } else {
-                    if (p1 < length1) {
-                        //nums1在偏移后越界,直接取数组最后一个值作为比较点
-                        compare1 = nums1[length1 - 1];
-                        p1Bound = true;
-                    } else {
-                        //nums1已经全部被遍历过了,或是本来就为空
-                        compare1 = Integer.MAX_VALUE;
-                    }
-                    compare2 = nums2[p2 + offset];
-                }
-
-                //谁大谁就呆着不动，然后另一个向后走，要注意计算每次丢弃掉的个数！
-                if (compare1 > compare2) {
-                    if (p2Bound) {
-                        abandonCount = length2 - p2;
-                    }
-                    return find(k - abandonCount, p1, p2 + halfKth);
-                } else {
-                    if(p1Bound){
-                        abandonCount = length1 - p1;
-                    }
-                    return find(k - abandonCount, p1 + halfKth, p2);
                 }
             }
+
+            return 0;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
