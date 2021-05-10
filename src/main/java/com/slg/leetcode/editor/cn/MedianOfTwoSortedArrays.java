@@ -31,9 +31,9 @@ public class MedianOfTwoSortedArrays {
             int k = (m + n + 1) / 2;
 
             if (isOdd) {
-                return find(k, nums1,nums2,0, 0);
+                return find(k, nums1, nums2, 0, 0);
             } else {
-                return (find(k,nums1,nums2, 0, 0) + find(k + 1,nums1,nums2, 0, 0)) / 2;
+                return (find(k, nums1, nums2, 0, 0) + find(k + 1, nums1, nums2, 0, 0)) / 2;
             }
         }
 
@@ -59,26 +59,35 @@ public class MedianOfTwoSortedArrays {
                 if (nums1.length - p1 > nums2.length - p2) {
                     //交换两条数组,保证nums1永远比nums2短
                     return find(k, nums2, nums1, p2, p1);
-                }else{
+                } else {
                     int halfKth = k / 2;
-                    boolean num1OutOfBound = halfKth > nums1.length - p1;
-                    int compare1;
-                    if(num1OutOfBound){
-                        //当num1已经越界时,直接取最后一个元素做比较
-                        compare1 = nums1[nums1.length - 1];
-                    }else{
-                        compare1 = nums1[p1 + halfKth - 1];
-                    }
-                    //todo 决定到底是抛弃nums1还是抛弃nums2的条件
-                    if (num1OutOfBound && compare1 < nums2[p2 + halfKth - 1]) {
-                        //nums1剩余的全抛弃，抛弃个数就是剩余长度
-                    } else if (compare1 < nums2[p2 + halfKth - 1]) {
+                    if (nums1.length <= p1) {
+                        //nums1此时已经被裁光了,直接从nums2中找即可
+                        return find(k - halfKth, nums1, nums2, nums1.length, p2 + halfKth);
+                    } else {
+                        boolean num1OutOfBound = halfKth > nums1.length - p1;
+                        int compare1;
+                        if (num1OutOfBound) {
+                            //当num1已经越界且不为空时,直接取最后一个元素做比较
+                            compare1 = nums1[nums1.length - 1];
+                        } else {
+                            compare1 = nums1[p1 + halfKth - 1];
+                        }
 
+                        if (num1OutOfBound && compare1 < nums2[p2 + halfKth - 1]) {
+                            //nums1剩余的全抛弃，抛弃个数就是剩余长度
+                            int abandon = nums1.length - p1;
+                            return find(k - abandon, nums1, nums2, nums1.length, p2);
+                        } else if (compare1 < nums2[p2 + halfKth - 1]) {
+                            //抛弃nums1
+                            return find(k - halfKth, nums1, nums2, p1 + halfKth, p2);
+                        } else {
+                            //抛弃nums2
+                            return find(k - halfKth, nums1, nums2, p1, p2 + halfKth);
+                        }
                     }
                 }
             }
-
-            return 0;
         }
     }
     //leetcode submit region end(Prohibit modification and deletion)
